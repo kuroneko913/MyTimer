@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="utf-8">
+    <title>Myタイマー</title>
+    <!-- <script src="./assets/js/bootstrap.min.js"></script> -->
+    <meta name="viewport " content="width=device-width, initial-scale=1 shrink-to-fit=no ">
+
+    <script src="./assets/js/jquery-3.4.1.js"></script>
+    <script src="./assets/js/popper.min.js"></script>
+    <script src="./assets/js/popper-utils.min.js"></script>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="./assets/css/style.css">
+    <link rel="stylesheet" href="./assets/css/bootstrap.css">
+
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-md navbar-light bg-info ">
+        <a class="navbar-brand " href="# ">
+            <img src="./images/get_started48.png " width="30 " height="30 " class="d-inline-block align-top " alt=" ">Myタイマー
+        </a>
+    </nav>
+    <div name="interval_timer">
+        <div name="title">
+            インターバルタイマー<br />
+        </div>
+        <div>
+            <input type="text" placeholder="90" name="interval_time" size=3>分後<br />
+            <!-- <div class="dropdown ">
+                <button type="button " id="minutes_selector " class="btn btn-secondary dropdown-toggle " data-toggle="dropdown " aria-haspopup="true " aria-expanded="false "></button>分後
+                <div class="dropdown-menu " aria-labelledby="minutes_selector ">
+                    <a class="dropdown-item " href="# ">15</a>
+                    <a class="dropdown-item " href="# ">30</a>
+                    <a class="dropdown-item " href="# ">45</a>
+                    <a class="dropdown-item " href="# ">60</a>
+                    <a class="dropdown-item " href="# ">90</a>
+                    <a class="dropdown-item " href="# ">120</a>
+                </div>
+            </div> -->
+            表示するメッセージ<br />
+            <input type="text" name="pop_message_1" placeholder="そろそろ休もう？"><br />
+        </div>
+    </div>
+    <br />
+    <div name="task_scheduler">
+        <div name="title">
+            いつもの作業<br />
+        </div>
+        <div>
+            表示する時刻:<br />
+            <input type="text" name="hour_num" placeholder="18" size="2">時<input type="text" name="minutes_num" placeholder="00" size="2">分<br /> 表示するメッセージ
+            <br />
+            <input type="text" name="pop_message_2" placeholder="そろそろチケット切ろうね！">
+        </div>
+        <div>
+            時間になったら開くページのURL<br />
+            <input type="text" name="open_URL" placeholder="https://www.google.co.jp/">
+            <br />
+        </div>
+    </div>
+    <br />
+    <button id="update">更新</button>
+    <br />
+    <script src="./assets/js/options.js"></script>
+</body>
+
+</html>

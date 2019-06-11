@@ -1,0 +1,19 @@
+body {
+    width: 250px;
+}
+
+input[name='pop_message_1'] {
+    width: 250px;
+}
+
+input[name='pop_message_2'] {
+    width: 250px;
+}
+
+input[name='redirect_URL'] {
+    width: 250px;
+}
+
+button {
+    width: 250px;
+}
