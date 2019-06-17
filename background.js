@@ -21,8 +21,8 @@ chrome.runtime.onInstalled.addListener(function() {
         parentId: parentId
     });
     chrome.contextMenus.create({
-        id: "open_Redmine",
-        title: "Redmineを開く",
+        id: "open_page",
+        title: "ページを開く",
         parentId: parentId
     })
 });
@@ -53,7 +53,7 @@ chrome.runtime.onStartup.addListener(function() {
 //追加したメニューがクリックされたときのイベント
 chrome.contextMenus.onClicked.addListener(function(info, tab) {
     setDefaultBadge();
-    if (info.menuItemId == "open_Redmine") {
+    if (info.menuItemId == "open_page") {
         openNewTab('https://www.google.com/');
     }
     if (info.menuItemId == "MyTimer_menu_60min") {
@@ -68,11 +68,15 @@ chrome.contextMenus.onClicked.addListener(function(info, tab) {
 });
 
 startTimer = function(endTime) {
+    var date = new Date();
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    const seconds = date.getSeconds();
+    alarmName = endTime.toString() + '_ALARM_' + hours.toString() + minutes.toString() + seconds.toString();
     alert(endTime + '分経ったらお知らせします！');
     chrome.alarms.clearAll();
-    alarmName = endTime.toString() + '_ALARM_' + Date();
     chrome.alarms.create(alarmName, { delayInMinutes: 1, periodInMinutes: 1 });
-    console.log(endTime.toString() + '_ALARM_' + Date());
+    console.log(alarmName);
     setDefaultBadge();
     var i = 0;
     pop_message_1 = 'そろそろ休憩しよう！';
