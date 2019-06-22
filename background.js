@@ -16,6 +16,11 @@ chrome.runtime.onInstalled.addListener(function() {
         parentId: parentId
     });
     chrome.contextMenus.create({
+        id: "MyTimer_menu_10min",
+        title: "10分タイマー",
+        parentId: parentId
+    });
+    chrome.contextMenus.create({
         id: "MyTimer_menu_5min",
         title: "5分タイマー",
         parentId: parentId
@@ -73,6 +78,9 @@ chrome.contextMenus.onClicked.addListener(function(info, tab) {
     if (info.menuItemId == "MyTimer_menu_90min") {
         startTimer(90);
     }
+    if (info.menuItemId == "MyTimer_menu_10min") {
+        startTimer(10);
+    }
     if (info.menuItemId == "MyTimer_menu_5min") {
         startTimer(5);
     }
@@ -111,8 +119,4 @@ startTimer = function(endTime, silentModeSwitch = false) {
 
 
 /* 起動時に5分タイマーを発動させる(サイレントモード) */
-<<<<<<< Updated upstream
-alert("Timer!");
-=======
->>>>>>> Stashed changes
 startTimer(5, true);
