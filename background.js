@@ -111,5 +111,8 @@ startTimer = function(endTime, silentModeSwitch = false) {
 
 
 /* 起動時に5分タイマーを発動させる(サイレントモード) */
+<<<<<<< Updated upstream
 alert("Timer!");
+=======
+>>>>>>> Stashed changes
 startTimer(5, true);
