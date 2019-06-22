@@ -26,6 +26,11 @@ chrome.runtime.onInstalled.addListener(function() {
         parentId: parentId
     });
     chrome.contextMenus.create({
+        id: "MyTimer_menu_1min",
+        title: "1分タイマー",
+        parentId: parentId
+    });
+    chrome.contextMenus.create({
         id: "open_page",
         title: "ページを開く",
         parentId: parentId
@@ -45,7 +50,7 @@ setDefaultBadge = function() {
 /* バッジの値の更新、アクテイブ時のみの挙動 */
 setActiveBadge = function(value) {
     chrome.browserAction.setBadgeBackgroundColor({ color: [0, 255, 0, 100] });
-    chrome.browserAction.setBadgeText({ text: value });
+    chrome.browserAction.setBadgeText({ text: value.toString() });
 }
 
 /* 新しいタブを開く */
@@ -66,9 +71,17 @@ chrome.runtime.onStartup.addListener(function() {
     setDefaultBadge();
 });
 
+
+isAlreadyStartTimer = function() {
+    chrome.alarms.getAll(function(timer) {
+        if (typeof(timer) === "undefind") {
+            return;
+        }
+        console.log(timer);
+    });
+};
 //追加したメニューがクリックされたときのイベント
 chrome.contextMenus.onClicked.addListener(function(info, tab) {
-    setDefaultBadge();
     if (info.menuItemId == "open_page") {
         openNewTab('https://www.google.com/');
     }
@@ -84,39 +97,67 @@ chrome.contextMenus.onClicked.addListener(function(info, tab) {
     if (info.menuItemId == "MyTimer_menu_5min") {
         startTimer(5);
     }
+    if (info.menuItemId == "MyTimer_menu_1min") {
+        startTimer(1);
+    }
 });
 
-startTimer = function(endTime, silentModeSwitch = false) {
+startTimer = function(endTime_) {
+    endTime = endTime_;
     var date = new Date();
     const hours = date.getHours();
     const minutes = date.getMinutes();
     const seconds = date.getSeconds();
-    alarmName = endTime.toString() + '_ALARM_' + hours.toString() + minutes.toString() + seconds.toString();
+    alarmName = endTime.toString() + '_Timer_' + hours.toString() + minutes.toString() + seconds.toString();
+    alert(endTime + '分経ったらお知らせします！');
+    chrome.alarms.create(alarmName, { delayInMinutes: endTime });
+    console.log('start:' + alarmName + ' : ' + Date());
+    var t = 0;
+    pop_message_1 = '時間だよ！';
+    // Run something when the alarm goes off
+    chrome.alarms.onAlarm.addListener(function(alarm) {
+        alert(endTime + '分経ったよ！' + pop_message_1);
+        chrome.alarms.clear(alarmName);
+    });
+};
+
+startIntervalTimer = function(endTime_, silentModeSwitch = false) {
+    endITime = endTime_;
+    var date = new Date();
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    const seconds = date.getSeconds();
+    alarmName = endITime.toString() + '_IntervalTimer_' + hours.toString() + minutes.toString() + seconds.toString();
     if (silentModeSwitch === false) {
-        alert(endTime + '分経ったらお知らせします！');
+        alert(endITime + '分経ったらお知らせします！');
     }
-    chrome.alarms.clearAll();
-    chrome.alarms.create(alarmName, { delayInMinutes: 1, periodInMinutes: 1 });
-    console.log(alarmName);
-    setActiveBadge(0);
-    var i = 0;
+    chrome.alarms.create(alarmName, { periodInMinutes: 1 });
+    console.log('start:' + alarmName + ' : ' + Date());
+    var it = 0;
+    setActiveBadge(it);
     pop_message_1 = 'そろそろ休憩しよう！';
     // Run something when the alarm goes off
     chrome.alarms.onAlarm.addListener(function(alarm) {
-        i++;
-        if (i == endTime) {
-            chrome.alarms.clear(alarmName, function() {
-                alert(endTime + "分経ったよ！" + pop_message_1);
-                console.log(alarmName + 'タイマーを破棄しました');
-                setDefaultBadge();
-                i = 0;
-            });
+        it++;
+        setActiveBadge(it);
+        console.log(it + "分経ったよ！" + 'name: ' + alarm['name'] + ' : ' + Date());
+        if (it == endITime) {
+            alert(endITime + '分経ったよ！' + pop_message_1);
+            isAlreadyStartTimer();
+            setDefaultBadge();
+            it = 0;
         }
-        setActiveBadge(i.toString());
-        console.log(i + "分経ったよ！" + 'name: ' + alarm['name'] + ' : ' + Date());
     });
 }
 
-
-/* 起動時に5分タイマーを発動させる(サイレントモード) */
-startTimer(5, true);
+/* 起動時に90分タイマーを発動させる(サイレントモード) */
+chrome.alarms.clearAll();
+isAlreadyStartTimer();
+setIntervalTime = 90;
+timerSwitch = true;
+startIntervalTimer(setIntervalTime, true);
+chrome.alarms.getAll(function(timers) {
+    timers.forEach(function(timer) {
+        console.log(timer['name']);
+    });
+});
