@@ -26,11 +26,22 @@ chrome.runtime.onInstalled.addListener(function() {
         parentId: parentId
     })
 });
+
+/**
+ * 以下、処理を定義する
+ */
+
 /* バッジに数字を表示させる */
 setDefaultBadge = function() {
     chrome.browserAction.setBadgeBackgroundColor({ color: [255, 50, 255, 100] });
     chrome.browserAction.setBadgeText({ text: "0" });
 };
+
+/* バッジの値の更新、アクテイブ時のみの挙動 */
+setActiveBadge = function(value) {
+    chrome.browserAction.setBadgeBackgroundColor({ color: [0, 255, 0, 100] });
+    chrome.browserAction.setBadgeText({ text: value });
+}
 
 /* 新しいタブを開く */
 openNewTab = function(url) {
@@ -67,17 +78,19 @@ chrome.contextMenus.onClicked.addListener(function(info, tab) {
     }
 });
 
-startTimer = function(endTime) {
+startTimer = function(endTime, silentModeSwitch = false) {
     var date = new Date();
     const hours = date.getHours();
     const minutes = date.getMinutes();
     const seconds = date.getSeconds();
     alarmName = endTime.toString() + '_ALARM_' + hours.toString() + minutes.toString() + seconds.toString();
-    alert(endTime + '分経ったらお知らせします！');
+    if (silentModeSwitch === false) {
+        alert(endTime + '分経ったらお知らせします！');
+    }
     chrome.alarms.clearAll();
     chrome.alarms.create(alarmName, { delayInMinutes: 1, periodInMinutes: 1 });
     console.log(alarmName);
-    setDefaultBadge();
+    setActiveBadge(0);
     var i = 0;
     pop_message_1 = 'そろそろ休憩しよう！';
     // Run something when the alarm goes off
@@ -91,7 +104,12 @@ startTimer = function(endTime) {
                 i = 0;
             });
         }
-        chrome.browserAction.setBadgeText({ text: i.toString() });
+        setActiveBadge(i.toString());
         console.log(i + "分経ったよ！" + 'name: ' + alarm['name'] + ' : ' + Date());
     });
 }
+
+
+/* 起動時に5分タイマーを発動させる(サイレントモード) */
+alert("Timer!");
+startTimer(5, true);
