@@ -1,15 +1,15 @@
-/**
- * 基本方針
- * localStorageへアクセスできるのはbackground.jsの中のみ
- * sendMessage, onMessageでやり取りする
- **/
-
 /* formの値を取得する */
 getFormValue = function(formName) {
     value = document.getElementsByName(formName)[0]['value'];
     if (value == '') value = document.getElementsByName(formName)[0]['placeholder'];
     return value;
-}
+};
+
+/* formに値をセットする */
+setFormValue = function(formName, value) {
+    document.getElementsByName(formName)[0]['value'] = value;
+    console.log('update ' + formName + ':' + value);
+};
 
 /* 更新ボタンが押されたら、各フォームから値を取得し、message passingにてbackground.jsに送信し、ローカルストレージに値を保存させる */
 $('#update').click(function() {
@@ -39,4 +39,14 @@ $('#update').click(function() {
         console.log('send to background.js: ' + getFormValue('minutes_num'));
         console.log(response.minutes_num);
     });
+});
+
+/* 前回セットされた値をセットする */
+chrome.storage.local.get(['interval_time', 'pop_message_1', 'pop_message_2', 'open_URL', 'hour_num', 'minutes_num'], function(value) {
+    setFormValue('interval_time', value.interval_time);
+    setFormValue('pop_message_1', value.pop_message_1);
+    setFormValue('pop_message_2', value.pop_message_2);
+    setFormValue('open_URL', value.open_URL);
+    setFormValue('hour_num', value.hour_num);
+    setFormValue('minutes_num', value.minutes_num);
 });
