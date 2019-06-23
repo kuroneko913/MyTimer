@@ -149,11 +149,7 @@ chrome.contextMenus.onClicked.addListener(function(info, tab) {
 /* Timerを定義 */
 startTimer = function(endTime_) {
     endTime = endTime_;
-    var date = new Date();
-    const hours = date.getHours();
-    const minutes = date.getMinutes();
-    const seconds = date.getSeconds();
-    alarmName = endTime.toString() + '_Timer_' + hours.toString() + minutes.toString() + seconds.toString();
+    alarmName = endTime.toString() + '_Timer_' + buildTimeString();
     alert(endTime + '分経ったらお知らせします！');
     chrome.alarms.create(alarmName, { "delayInMinutes": endTime });
     console.log('start:' + alarmName + ' : ' + Date());
@@ -173,11 +169,7 @@ startTimer = function(endTime_) {
 /* Interval Timerを定義 */
 startIntervalTimer = function(endTime_, silentModeSwitch = false) {
     endITime = endTime_;
-    var date = new Date();
-    const hours = date.getHours();
-    const minutes = date.getMinutes();
-    const seconds = date.getSeconds();
-    alarmName = endITime.toString() + '_IntervalTimer_' + hours.toString() + minutes.toString() + seconds.toString();
+    alarmName = endITime.toString() + '_IntervalTimer_' + buildTimeString();
     if (silentModeSwitch === false) {
         alert(endITime + '分経ったらお知らせします！');
     }
@@ -201,11 +193,18 @@ startIntervalTimer = function(endTime_, silentModeSwitch = false) {
     });
 };
 
+/* 現在時刻だけをstringで返す */
+buildTimeString = function() {
+    var date = new Date();
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    const seconds = date.getSeconds();
+    return hours.toString() + minutes.toString() + seconds.toString();
+};
+
 /* 時刻になったらページを開く */
 startAlarm = function(hour_num, minutes_num) {
     alarmName = 'Action_Alarm';
-    target_date = Date.now();
-    delta = 0;
     target_date = getTargetDate(hour_num, minutes_num);
     target_milisec = target_date.getTime();
     chrome.alarms.create(alarmName, { "when": target_milisec });
