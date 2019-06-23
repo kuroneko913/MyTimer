@@ -58,11 +58,6 @@ openNewTab = function(url) {
     chrome.tabs.create({ "url": url });
 }
 
-/* 設定値のstorageへの保存 */
-saveSettings = function(values) {
-    chrome.storage.local.set(values);
-};
-
 /* options.jsからの値を取得し、ローカルストレージへ保存する */
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     if (request.interval_time) {
@@ -97,32 +92,6 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     }
     return true;
 });
-
-// chrome.storage.local.get(['interval_time'], function(value) {
-//             console.log(value.interval_time + 'がセットされています');
-//         });
-
-
-// chrome.runtime.onMessage.addListener(function(request, sender) {
-//     console.log(request.pop_message_1);
-//     return true;
-// });
-// chrome.runtime.onMessage.addListener(function(request, sender) {
-//     console.log(request.pop_message_2);
-//     return true;
-// });
-// chrome.runtime.onMessage.addListener(function(request, sender) {
-//     console.log(request.open_URL);
-//     return true;
-// });
-// chrome.runtime.onMessage.addListener(function(request, sender) {
-//     console.log(request.hour_num);
-//     return true;
-// });
-// chrome.runtime.onMessage.addListener(function(request, sender) {
-//     console.log(request.minutes_num);
-//     return true;
-// });
 
 //Chromeが起動してから
 chrome.runtime.onStartup.addListener(function() {
