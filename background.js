@@ -119,7 +119,9 @@ isAlreadyStartTimer = function() {
 //追加したメニューがクリックされたときのイベント
 chrome.contextMenus.onClicked.addListener(function(info, tab) {
     if (info.menuItemId == "open_page") {
-        openNewTab('https://www.google.com/');
+        chrome.storage.local.get(['open_URL'], function(value) {
+            openNewTab(value.open_URL);
+        });
     }
     if (info.menuItemId == "MyTimer_menu_60min") {
         startTimer(60);
