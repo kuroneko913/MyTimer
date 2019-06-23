@@ -63,15 +63,82 @@ saveSettings = function(values) {
     chrome.storage.local.set(values);
 };
 
-/* settingの値を取得する */
+/* options.jsからの値を取得し、ローカルストレージへ保存する */
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+    if (request.interval_time) {
+        chrome.storage.local.set({ interval_time: request.interval_time }, function() {
+            sendResponse({ interval_time: request.interval_time + "をセットしました" });
+        });
+    }
+    if (request.pop_message_1) {
+        chrome.storage.local.set({ pop_message_1: request.pop_message_1 }, function() {
+            sendResponse({ pop_message_1: request.pop_message_1 + "をセットしました" });
+        });
+    }
+    if (request.pop_message_2) {
+        chrome.storage.local.set({ pop_message_2: request.pop_message_2 }, function() {
+            sendResponse({ pop_message_2: request.pop_message_2 + "をセットしました" });
+        });
+    }
+    if (request.open_URL) {
+        chrome.storage.local.set({ open_URL: request.open_URL }, function() {
+            sendResponse({ open_URL: request.open_URL + "をセットしました" });
+        });
+    }
+    if (request.hour_num) {
+        chrome.storage.local.set({ hour_num: request.hour_num }, function() {
+            sendResponse({ hour_num: request.hour_num + "をセットしました" });
+        });
+    }
+    if (request.minutes_num) {
+        chrome.storage.local.set({ minutes_num: request.minutes_num }, function() {
+            sendResponse({ minutes_num: request.minutes_num + "をセットしました" });
+        });
+    }
+    return true;
+});
 
+// chrome.storage.local.get(['interval_time'], function(value) {
+//             console.log(value.interval_time + 'がセットされています');
+//         });
+
+
+// chrome.runtime.onMessage.addListener(function(request, sender) {
+//     console.log(request.pop_message_1);
+//     return true;
+// });
+// chrome.runtime.onMessage.addListener(function(request, sender) {
+//     console.log(request.pop_message_2);
+//     return true;
+// });
+// chrome.runtime.onMessage.addListener(function(request, sender) {
+//     console.log(request.open_URL);
+//     return true;
+// });
+// chrome.runtime.onMessage.addListener(function(request, sender) {
+//     console.log(request.hour_num);
+//     return true;
+// });
+// chrome.runtime.onMessage.addListener(function(request, sender) {
+//     console.log(request.minutes_num);
+//     return true;
+// });
 
 //Chromeが起動してから
 chrome.runtime.onStartup.addListener(function() {
     setDefaultBadge();
+    /* 起動時に90分タイマーを発動させる(サイレントモード) */
+    chrome.alarms.clearAll();
+    setIntervalTime = 90;
+    startIntervalTimer(setIntervalTime, true);
+    chrome.alarms.getAll(function(timers) {
+        timers.forEach(function(timer) {
+            console.log(timer['name']);
+        });
+    });
 });
 
-
+/* Timerがすでに起動していないかをチェックする */
 isAlreadyStartTimer = function() {
     chrome.alarms.getAll(function(timer) {
         if (typeof(timer) === "undefind") {
@@ -120,7 +187,7 @@ startTimer = function(endTime_) {
         chrome.alarms.clear(alarmName);
     });
 };
-
+/* Interval Timerを定義 */
 startIntervalTimer = function(endTime_, silentModeSwitch = false) {
     endITime = endTime_;
     var date = new Date();
@@ -149,15 +216,3 @@ startIntervalTimer = function(endTime_, silentModeSwitch = false) {
         }
     });
 }
-
-/* 起動時に90分タイマーを発動させる(サイレントモード) */
-chrome.alarms.clearAll();
-isAlreadyStartTimer();
-setIntervalTime = 90;
-timerSwitch = true;
-startIntervalTimer(setIntervalTime, true);
-chrome.alarms.getAll(function(timers) {
-    timers.forEach(function(timer) {
-        console.log(timer['name']);
-    });
-});
