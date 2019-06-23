@@ -3,12 +3,13 @@ Chrome extension for practice.
 
 images : Getting Started Tutorial https://developer.chrome.com/extensions/getstarted
 
-1. Interval timer (loop) (config at main menu)
-    Ex. every 90min ago, popup message for rest 
+インターバルタイマー
+- デフォルトで、ブラウザを開いてから90分経過するたびに、お知らせする。
 
-2. Timer (sub menu only)
-   Ex.  After 5min. popup mesaage
+タイマー
+- 1,5,10,60,90分を計測し、お知らせするタイマー
+-  右メニュークリックで使用可能
 
-3. Alarm + tab open (config at main menu) 
-   Ex. At 18:00  open https://www.google.com
-
+アラーム
+- 指定した時刻になると、お知らせするタイマー
+- 指定したページを新しく開く機能付き
