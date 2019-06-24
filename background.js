@@ -40,6 +40,26 @@ chrome.runtime.onInstalled.addListener(function() {
         title: "ページを開く",
         parentId: parentId
     });
+    /* デフォルト値を設定しておく */
+    chrome.storage.local.set({ interval_time: '90' }, function() {
+        console.log('init interval_time');
+    });
+    chrome.storage.local.set({ pop_message_1: 'そろそろ休もう?' }, function() {
+        console.log('init pop_message_1');
+    });
+    chrome.storage.local.set({ pop_message_2: 'そろそろ記録しようね' }, function() {
+        console.log('init pop_message_2');
+    });
+    chrome.storage.local.set({ open_URL: '' }, function() {
+        console.log('init open_URL');
+    });
+    chrome.storage.local.set({ hour_num: 17 }, function() {
+        console.log('init hour_num');
+    });
+    chrome.storage.local.set({ minutes_num: 30 }, function() {
+        console.log('init minutes_num');
+    });
+    main();
 });
 
 /**
@@ -56,12 +76,12 @@ setDefaultBadge = function() {
 setActiveBadge = function(value) {
     chrome.browserAction.setBadgeBackgroundColor({ color: [0, 255, 0, 100] });
     chrome.browserAction.setBadgeText({ text: value.toString() });
-}
+};
 
 /* 新しいタブを開く */
 openNewTab = function(url) {
     chrome.tabs.create({ "url": url });
-}
+};
 
 /* options.jsからの値を取得し、ローカルストレージへ保存する */
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
@@ -229,22 +249,27 @@ startAlarm = function(hour_num, minutes_num) {
     });
 };
 
-/* 起動後すぐに行う処理を記述 */
-
-setDefaultBadge();
-/* 起動時に一定時間ごとにタイマーを発動させる(サイレントモード) */
-chrome.alarms.clearAll();
-chrome.storage.local.get(['interval_time'], function(value) {
-    startIntervalTimer(value.interval_time, true);
-});
-chrome.alarms.getAll(function(timers) {
-    timers.forEach(function(timer) {
-        console.log(timer['name']);
+main = function() {
+    setDefaultBadge();
+    /* 起動時に一定時間ごとにタイマーを発動させる(サイレントモード) */
+    chrome.alarms.clearAll();
+    chrome.storage.local.get(['interval_time'], function(value) {
+        startIntervalTimer(value.interval_time, true);
     });
-});
-/* 時間になったら、ページを移動する */
-chrome.storage.local.get(['hour_num', 'minutes_num'], function(value) {
-    hour_num = value.hour_num;
-    minutes_num = value.minutes_num;
-    startAlarm(hour_num, minutes_num);
+    chrome.alarms.getAll(function(timers) {
+        timers.forEach(function(timer) {
+            console.log(timer['name']);
+        });
+    });
+    /* 時間になったら、ページを移動する */
+    chrome.storage.local.get(['hour_num', 'minutes_num'], function(value) {
+        hour_num = value.hour_num;
+        minutes_num = value.minutes_num;
+        startAlarm(hour_num, minutes_num);
+    });
+};
+
+/* 起動後すぐに行う処理を記述 */
+chrome.runtime.onStartup.addListener(function() {
+    main();
 });
