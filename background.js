@@ -16,6 +16,11 @@ chrome.runtime.onInstalled.addListener(function() {
         parentId: parentId
     });
     chrome.contextMenus.create({
+        id: "MyTimer_menu_30min",
+        title: "30分タイマー",
+        parentId: parentId
+    });
+    chrome.contextMenus.create({
         id: "MyTimer_menu_10min",
         title: "10分タイマー",
         parentId: parentId
@@ -34,7 +39,7 @@ chrome.runtime.onInstalled.addListener(function() {
         id: "open_page",
         title: "ページを開く",
         parentId: parentId
-    })
+    });
 });
 
 /**
@@ -129,11 +134,14 @@ chrome.contextMenus.onClicked.addListener(function(info, tab) {
             openNewTab(value.open_URL);
         });
     }
+    if (info.menuItemId == "MyTimer_menu_90min") {
+        startTimer(90);
+    }
     if (info.menuItemId == "MyTimer_menu_60min") {
         startTimer(60);
     }
-    if (info.menuItemId == "MyTimer_menu_90min") {
-        startTimer(90);
+    if (info.menuItemId == "MyTimer_menu_30min") {
+        startTimer(30);
     }
     if (info.menuItemId == "MyTimer_menu_10min") {
         startTimer(10);
@@ -168,12 +176,12 @@ startTimer = function(endTime_) {
 
 /* Interval Timerを定義 */
 startIntervalTimer = function(endTime_, silentModeSwitch = false) {
-    endITime = endTime_;
+    endITime = parseInt(endTime_);
     alarmName = endITime.toString() + '_IntervalTimer_' + buildTimeString();
     if (silentModeSwitch === false) {
-        alert(endITime + '分経ったらお知らせします！');
+        alert(endITime.toString() + '分経ったらお知らせします！');
     }
-    chrome.alarms.create(alarmName, { "periodInMinutes": 1 });
+    chrome.alarms.create(alarmName, { periodInMinutes: 1 });
     console.log('start:' + alarmName + ' : ' + Date());
     var it = 0;
     setActiveBadge(it);
@@ -186,9 +194,9 @@ startIntervalTimer = function(endTime_, silentModeSwitch = false) {
         setActiveBadge(it);
         console.log(it + "分経ったよ！" + 'name: ' + alarm['name'] + ' : ' + Date());
         if (it === endITime) {
-            alert(endITime + '分経ったよ！' + pop_message_1);
-            setDefaultBadge();
+            alert(endITime.toString() + '分経ったよ！' + pop_message_1);
             it = 0;
+            setActiveBadge(it);
         }
     });
 };
