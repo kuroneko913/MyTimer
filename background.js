@@ -269,7 +269,17 @@ main = function() {
     });
 };
 
+/* 起動後にmain関数を実行する */
+timerStart = function() {
+    alert("起動!");
+    main();
+    console.log('timerstart!');
+};
+
 /* 起動後すぐに行う処理を記述 */
 chrome.runtime.onStartup.addListener(function() {
-    main();
+    timerStart();
+    console.log('startup!');
 });
+
+setTimeout(timerStart, 1000);
