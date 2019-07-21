@@ -284,16 +284,12 @@ main = function() {
 };
 
 /* 起動後にmain関数を実行する */
-mainfunction = function() {
+main_function = function() {
     alert("起動!");
     main();
-    console.log('timerstart!');
 };
 
-// /* 起動後すぐに行う処理を記述 */
-// chrome.runtime.onStartup.addListener(function() {
-//     mainfunction();
-//     console.log('startup!');
-// });
-
-setTimeout(mainfunction, 1000);
+/* 起動後すぐに行う処理を記述 */
+chrome.runtime.onStartup.addListener(function() {
+    main_function();
+});
