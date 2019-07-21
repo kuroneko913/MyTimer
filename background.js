@@ -40,26 +40,40 @@ chrome.runtime.onInstalled.addListener(function() {
         title: "ページを開く",
         parentId: parentId
     });
+
     /* デフォルト値を設定しておく */
-    chrome.storage.local.set({ interval_time: '90' }, function() {
-        console.log('init interval_time');
+    chrome.storage.local.get(['interval_time', 'pop_message_1', 'pop_message_2', 'open_URL', 'hour_num', 'minutes_num'], function(value) {
+        if (value.interval_time === undefined) {
+            chrome.storage.local.set({ interval_time: '90' }, function() {
+                console.log('init interval_time');
+            });
+        }
+        if (value.pop_message_1 === undefined) {
+            chrome.storage.local.set({ pop_message_1: 'そろそろ休もう?' }, function() {
+                console.log('init pop_message_1');
+            });
+        }
+        if (value.pop_message_2 === undefined) {
+            chrome.storage.local.set({ pop_message_2: 'そろそろ記録しようね' }, function() {
+                console.log('init pop_message_2');
+            });
+        }
+        if (value.open_URL === undefined) {
+            chrome.storage.local.set({ open_URL: '' }, function() {
+                console.log('init open_URL');
+            });
+        }
+        if (value.hour_num === undefined) {
+            chrome.storage.local.set({ hour_num: 17 }, function() {
+                console.log('init hour_num');
+            });
+        }
+        if (value.minutes_num === undefined) {
+            chrome.storage.local.set({ minutes_num: 30 }, function() {
+                console.log('init minutes_num');
+            });
+        }
     });
-    chrome.storage.local.set({ pop_message_1: 'そろそろ休もう?' }, function() {
-        console.log('init pop_message_1');
-    });
-    chrome.storage.local.set({ pop_message_2: 'そろそろ記録しようね' }, function() {
-        console.log('init pop_message_2');
-    });
-    chrome.storage.local.set({ open_URL: '' }, function() {
-        console.log('init open_URL');
-    });
-    chrome.storage.local.set({ hour_num: 17 }, function() {
-        console.log('init hour_num');
-    });
-    chrome.storage.local.set({ minutes_num: 30 }, function() {
-        console.log('init minutes_num');
-    });
-    main();
 });
 
 /**
@@ -270,16 +284,16 @@ main = function() {
 };
 
 /* 起動後にmain関数を実行する */
-timerStart = function() {
+mainfunction = function() {
     alert("起動!");
     main();
     console.log('timerstart!');
 };
 
-/* 起動後すぐに行う処理を記述 */
-chrome.runtime.onStartup.addListener(function() {
-    timerStart();
-    console.log('startup!');
-});
+// /* 起動後すぐに行う処理を記述 */
+// chrome.runtime.onStartup.addListener(function() {
+//     mainfunction();
+//     console.log('startup!');
+// });
 
-setTimeout(timerStart, 1000);
+setTimeout(mainfunction, 1000);
