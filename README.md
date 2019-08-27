@@ -3,8 +3,10 @@ Chrome extension for practice.
 
 images : Getting Started Tutorial https://developer.chrome.com/extensions/getstarted
 
+アイコンをクリックすると、インターバルタイマーとアラームが起動する
+
 インターバルタイマー
-- デフォルトで、ブラウザを開いてから90分経過するたびに、お知らせする。
+- 90分経過するたびに、お知らせする。
 
 タイマー
 - 1,5,10,30,60,90分を計測し、お知らせするタイマー
