@@ -7,10 +7,11 @@ getFormValue = function(formName) {
 
 /* formに値をセットする */
 setFormValue = function(formName, value) {
-    if (value !== '' && value !== 'undefined') {
-        document.getElementsByName(formName)[0]['value'] = value;
-        console.log('update ' + formName + ':' + value);
+    if (value == 'undefined') {
+        value = document.getElementsByName(formName)[0]['placeholder'];
     }
+    document.getElementsByName(formName)[0]['value'] = value;
+    console.log('update ' + formName + ':' + value);
 };
 
 /* 更新ボタンが押されたら、各フォームから値を取得し、message passingにてbackground.jsに送信し、ローカルストレージに値を保存させる */
