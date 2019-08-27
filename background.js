@@ -289,7 +289,7 @@ main_function = function() {
     main();
 };
 
-/* 起動後すぐに行う処理を記述 */
-chrome.runtime.onStartup.addListener(function() {
+/* アイコンがクリックされたらスタート */
+chrome.browserAction.onClicked.addListener(function() {
     main_function();
 });
