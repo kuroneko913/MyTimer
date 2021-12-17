@@ -1,12 +1,12 @@
 {
-    "name": "シェアハピ",
+    "name": "MyTimer",
     "version": "0.0.1",
-    "description": "開発部にシェアしたい発言をシェアできるボタン",
+    "description": "タイマー",
     "permissions": [],
 	"content_scripts": [
 		{
 			"run_at": "document_end",
-			"matches":["https://kcw.kddi.ne.jp/*"],
+			"matches":["*"],
 			"js": ["jquery-3.4.1.min.js"]
 		}
 	],
